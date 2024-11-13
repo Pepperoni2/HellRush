@@ -21,8 +21,8 @@ const monsters = [
     { name: 'IMP', health: 25, imgSrc: './images/ImpWalking.webp'},
     { name: 'Pinky', health: 75, imgSrc: './images/PinkyIdle.webp'},
     { name: 'Zombieman', health: 15, imgSrc: './images/Formerhuman_sprite.webp'},
-    { name: 'Cacodemon', health: 200, imgSrc: './images/cacodemon.png'},
-    { name: 'Demonwarrior', heatlh: 150, imgSrc: './images/EXdemon.png'}
+    { name: 'Cacodemon', health: 150, imgSrc: './images/cacodemon.png'},
+    { name: 'Demonwarrior', heatlh: 200, imgSrc: './images/EXdemon.png'}
 ];
 
 /*Initiliasing  Menu references */
@@ -63,12 +63,14 @@ function StartGame(){
     healthBar.textContent = playerHealth + "%";
     setAmmo()
     demonHealth.textContent = monsters[index].health + "%";
-    demonName.textContent = monsters[index].name;
-    turnEvent.textContent = monsters[index].name + " approaches";
+    demonName.textContent   = monsters[index].name;
+    turnEvent.textContent   = monsters[index].name + " approaches";
 
 }
 
 function battle(playerAction){
+
+    /* Cooldown Check for Mega Health and Quad Damage */    
     if(!quadActivated){
         quadCountdown -= 1;  
         document.querySelector('#quadCooldown').innerHTML = quadCountdown + ' Turns remaining';
@@ -179,7 +181,7 @@ function MegaHealth(){
     healthBar.textContent = playerHealth + "%";
     turnEvent.innerHTML += `Doom Guy healed +100 Healthpoints`;
     document.querySelector("#MegaContainer").querySelector('button').disabled = true;
-    document.querySelector('megaCooldown').innerHTML = megaCountdown + ' Turns remaining';
+    document.querySelector('#megaCooldown').innerHTML = megaCountdown + ' Turns remaining';
     megaActivated = false;
     
 }
