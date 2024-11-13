@@ -1,14 +1,14 @@
 /*Initiliasing game variables */
 let playerHealth = 100;
-let enemyHealth  = 25;
 let enemyDamage;
 let pistolDamage, shotGunDamage;
 let damageMultiplier = 1;
+
 // set ammo variables
 let maxShells, currentShells;
 let maxAmmo, currentAmmo;
 
-/* variables for cooldown */
+/* variables for weapon cooldown */
 let quadActivated = true, quadCountdown = 5;
 let megaActivated = true, megaCountdown = 3;
 
@@ -22,7 +22,9 @@ const monsters = [
     { name: 'Pinky', health: 75, imgSrc: './images/PinkyIdle.webp'},
     { name: 'Zombieman', health: 15, imgSrc: './images/Formerhuman_sprite.webp'},
     { name: 'Cacodemon', health: 150, imgSrc: './images/cacodemon.png'},
-    { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png'}
+    { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png'},
+    { name: 'Juggernaut', health: 300, imgSrc: './images/Jugger.png'},
+    { name: 'Archvile', health: 120, imgSrc: './images/Archvile.webp'}
 ];
 
 /*Initiliasing  Menu references */
@@ -41,16 +43,7 @@ const demonName      = document.querySelector('#enemyName');
 const demonImage     = document.querySelector('#enemyImg');
 const turnEvent      = document.querySelector('#turnEvent')
 
-function setAmmo(){
-    maxAmmo = 15;
-    currentAmmo = maxAmmo;
-    maxShells = 3;
-    currentShells = maxShells;
-    document.querySelector('#maxAmmo').innerHTML = maxAmmo;
-    document.querySelector('#currentAmmo').innerHTML = currentAmmo;
-    document.querySelector('#maxShells').innerHTML = maxShells;
-    document.querySelector('#currentShells').innerHTML = currentShells;
-}
+
 
 function StartGame(){
     console.log('The game has started');
@@ -67,10 +60,28 @@ function StartGame(){
     turnEvent.textContent   = monsters[index].name + " approaches";
 
 }
-
-
+// Handle functions for ammunition 
+// declaring global ammo variables
+function setAmmo(){
+    maxAmmo = 15;
+    currentAmmo = maxAmmo;
+    maxShells = 3;
+    currentShells = maxShells;
+    document.querySelector('#maxAmmo').innerHTML = maxAmmo;
+    document.querySelector('#currentAmmo').innerHTML = currentAmmo;
+    document.querySelector('#maxShells').innerHTML = maxShells;
+    document.querySelector('#currentShells').innerHTML = currentShells;
+}
+// Updating ammo Count on the User Interface ("Player Bar")
 function updateAmmo(ammotype, currentAmmo){
     ammotype.innerHTML = currentAmmo;
+}
+// Reloading resets the ammo count
+function Reloading(ammotype, ammoLimit, containerRef = '', btnRef = '', spanRef){
+    ammotype = ammoLimit;
+    document.querySelector(containerRef).querySelector(btnRef).style.display = 'block';
+    turnEvent.innerHTML += `Doom Guy reloads!`;
+    updateAmmo(spanRef, ammotype);
 }
 
 function battle(playerAction){
@@ -113,11 +124,24 @@ function battle(playerAction){
         case 'quad':
             QuadDamage()
             break;
+        case 'reload pistol':
+            /* call reloading function
+                -) function parameters
+                pass current pistol ammo, max pistolAmmo, ID of the pistolcontainer, ID of the child btn, span reference inside the btn; 
+            */
+            Reloading(currentAmmo, maxAmmo, '#pistolContainer', '#btnPistol', pistolAmmo);
+            currentAmmo = maxAmmo;
+            break;
+        case 'reload shotgun':
+            /* same procedure, see codeLine: 128-130 */
+            Reloading(currentShells, maxShells, '#shotGunContainer', '#btnShotgun', shotgunShells);
+            currentShells = maxShells;
+            break;
         default:
-            alert('An unknown error has occured!');
+            console.error('An unknown error has occured!');
             break;
     }
-    if(enemyHealth <= 0){
+    if(monsters[index].health <= 0){
         setNextEnemy();
     }
     else{ 
@@ -138,10 +162,9 @@ function calcEnemyDamage(){
 
 function setNextEnemy(){
     index += 1;
-    enemyHealth = monsters[index].health;
     demonImage.src = monsters[index].imgSrc;
     demonName.textContent = monsters[index].name;
-    demonHealth.textContent = enemyHealth + '%';
+    demonHealth.textContent = monsters[index].health + '%';
     turnEvent.textContent = monsters[index].name + " approaches!";
 }
 
@@ -155,35 +178,45 @@ function Pistol(){
     currentAmmo -= 1;
     updateAmmo(pistolAmmo, currentAmmo);
     if(currentAmmo <= 0){
-        document.querySelector('#pistolContainer').querySelector('button').disabled = true;
+        document.querySelector('#pistolContainer').querySelector('#btnPistol').style.display = 'none';
+        let reloadButton = document.createElement('button');
+        reloadButton.innerHTML = 'Reload Pistol'
+        document.querySelector('#pistolContainer').appendChild(reloadButton);
+        reloadButton.addEventListener('click', function(){
+            battle('reload pistol');
+            reloadButton.style.display = 'none';
+        });
     }
     pistolDamage = 10 * damageMultiplier;
     damageMultiplier = 1;
-    enemyHealth -= pistolDamage;
-    demonHealth.textContent = enemyHealth + "%";
+    monsters[index].health-= pistolDamage;
+    demonHealth.textContent = monsters[index].health + "%";
     turnEvent.innerHTML += `Doom Guy did ${pistolDamage} damage! \n`;
 }
 
 function Shotgun(){
+    
     currentShells -= 1;
     updateAmmo(shotgunShells, currentShells);
+    // =============
+    /* 
+        check if current Shotgun shells are 0 
+        hide shotgun Button and create Reload Button (should be deleted, when reload is pressed)
+    */
     if(currentShells <= 0){
         document.querySelector('#shotGunContainer').querySelector('#btnShotgun').style.display = 'none';
         let reloadButton = document.createElement('button');
         reloadButton.innerHTML = 'Reload Shotgun'
         document.querySelector('#shotGunContainer').appendChild(reloadButton);
         reloadButton.addEventListener('click', function(){
-                currentShells = maxShells;
-                document.querySelector('#shotGunContainer').querySelector('#btnShotgun').style.display = 'block';
-                updateAmmo(shotgunShells, currentShells);
-                reloadButton.style.display = 'none';
-            }
-        );
+            battle('reload shotgun')
+            reloadButton.style.display = 'none';
+        });
     }
     shotGunDamage = 35 * damageMultiplier;
     damageMultiplier = 1;
-    enemyHealth -= shotGunDamage;
-    demonHealth.textContent = enemyHealth + "%";
+    monsters[index].health -= shotGunDamage;
+    demonHealth.textContent = monsters[index].health + "%";
     turnEvent.innerHTML += `Doom Guy did ${shotGunDamage} damage! `;
 
 }
