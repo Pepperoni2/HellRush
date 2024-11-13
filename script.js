@@ -10,7 +10,7 @@ let maxAmmo, currentAmmo;
 
 /* variables for cooldown */
 let quadActivated = true, quadCountdown = 5;
-let megaActivated = true, megaCountdown = 5;
+let megaActivated = true, megaCountdown = 3;
 
 
 
@@ -22,7 +22,7 @@ const monsters = [
     { name: 'Pinky', health: 75, imgSrc: './images/PinkyIdle.webp'},
     { name: 'Zombieman', health: 15, imgSrc: './images/Formerhuman_sprite.webp'},
     { name: 'Cacodemon', health: 150, imgSrc: './images/cacodemon.png'},
-    { name: 'Demonwarrior', heatlh: 200, imgSrc: './images/EXdemon.png'}
+    { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png'}
 ];
 
 /*Initiliasing  Menu references */
@@ -42,9 +42,9 @@ const demonImage     = document.querySelector('#enemyImg');
 const turnEvent      = document.querySelector('#turnEvent')
 
 function setAmmo(){
-    maxAmmo = 20;
+    maxAmmo = 15;
     currentAmmo = maxAmmo;
-    maxShells = 6;
+    maxShells = 3;
     currentShells = maxShells;
     document.querySelector('#maxAmmo').innerHTML = maxAmmo;
     document.querySelector('#currentAmmo').innerHTML = currentAmmo;
@@ -66,6 +66,11 @@ function StartGame(){
     demonName.textContent   = monsters[index].name;
     turnEvent.textContent   = monsters[index].name + " approaches";
 
+}
+
+
+function updateAmmo(ammotype, currentAmmo){
+    ammotype.innerHTML = currentAmmo;
 }
 
 function battle(playerAction){
@@ -148,11 +153,11 @@ function GameOver(){
 
 function Pistol(){
     currentAmmo -= 1;
-    pistolAmmo.innerHTML = currentAmmo;
+    updateAmmo(pistolAmmo, currentAmmo);
     if(currentAmmo <= 0){
         document.querySelector('#pistolContainer').querySelector('button').disabled = true;
     }
-    pistolDamage = 5 * damageMultiplier;
+    pistolDamage = 10 * damageMultiplier;
     damageMultiplier = 1;
     enemyHealth -= pistolDamage;
     demonHealth.textContent = enemyHealth + "%";
@@ -161,11 +166,21 @@ function Pistol(){
 
 function Shotgun(){
     currentShells -= 1;
-    shotgunShells.innerHTML = currentShells;
+    updateAmmo(shotgunShells, currentShells);
     if(currentShells <= 0){
-        document.querySelector('#shotGunContainer').querySelector('button').disabled = true;
+        document.querySelector('#shotGunContainer').querySelector('#btnShotgun').style.display = 'none';
+        let reloadButton = document.createElement('button');
+        reloadButton.innerHTML = 'Reload Shotgun'
+        document.querySelector('#shotGunContainer').appendChild(reloadButton);
+        reloadButton.addEventListener('click', function(){
+                currentShells = maxShells;
+                document.querySelector('#shotGunContainer').querySelector('#btnShotgun').style.display = 'block';
+                updateAmmo(shotgunShells, currentShells);
+                reloadButton.style.display = 'none';
+            }
+        );
     }
-    shotGunDamage = 25 * damageMultiplier;
+    shotGunDamage = 35 * damageMultiplier;
     damageMultiplier = 1;
     enemyHealth -= shotGunDamage;
     demonHealth.textContent = enemyHealth + "%";
@@ -183,7 +198,6 @@ function MegaHealth(){
     document.querySelector("#MegaContainer").querySelector('button').disabled = true;
     document.querySelector('#megaCooldown').innerHTML = megaCountdown + ' Turns remaining';
     megaActivated = false;
-    
 }
 
 function QuadDamage(){
@@ -192,5 +206,4 @@ function QuadDamage(){
     document.querySelector("#QuadContainer").querySelector('button').disabled = true;
     document.querySelector('#quadCooldown').innerHTML = quadCountdown + ' Turns remaining';
     quadActivated = false;
-
 }
