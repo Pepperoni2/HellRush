@@ -1,5 +1,10 @@
-/*Initiliasing game variables */
+/* Initiliasing game variables */
+
+/*
+    variables that are important for game calculation
+*/
 let playerHealth = 100;
+let enemyHealth = 25;
 let enemyDamage;
 let pistolDamage, shotGunDamage;
 let damageMultiplier = 1;
@@ -9,22 +14,25 @@ let maxShells, currentShells;
 let maxAmmo, currentAmmo;
 
 /* variables for weapon cooldown */
-let quadActivated = true, quadCountdown = 5;
-let megaActivated = true, megaCountdown = 3;
-
-
-
+let quadActivated = true, quadCountdown = 10;
+let megaActivated = true, megaCountdown = 4;
 
 /* Init Objects */
+
+/*
+    in the monster array containing objects with stats like name, health and imgSrc
+    the health will be stored into the global enemyHealth variable 
+*/
 let index = 0;
 const monsters = [
-    { name: 'IMP', health: 25, imgSrc: './images/ImpWalking.webp'},
-    { name: 'Pinky', health: 75, imgSrc: './images/PinkyIdle.webp'},
-    { name: 'Zombieman', health: 15, imgSrc: './images/Formerhuman_sprite.webp'},
-    { name: 'Cacodemon', health: 150, imgSrc: './images/cacodemon.png'},
-    { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png'},
-    { name: 'Juggernaut', health: 300, imgSrc: './images/Jugger.png'},
-    { name: 'Archvile', health: 120, imgSrc: './images/Archvile.webp'}
+    { name: 'Imp', health: 25, imgSrc: './images/ImpWalking.webp'},
+    { name: 'Pinky', health: 75, imgSrc: './images/PinkyIdle.webp', },
+    { name: 'Zombieman', health: 15, imgSrc: './images/Formerhuman_sprite.webp', },
+    { name: 'Cacodemon', health: 150, imgSrc: './images/cacodemon.png', },
+    { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png', },
+    { name: 'Juggernaut', health: 300, imgSrc: './images/Jugger.png', },
+    { name: 'Archvile', health: 120, imgSrc: './images/Archvile.webp', },
+    { name: 'YOU WON!', health: 'You survived against the HELL RUSH', imgSrc: './images/win.gif'}
 ];
 
 /*Initiliasing  Menu references */
@@ -43,7 +51,40 @@ const demonName      = document.querySelector('#enemyName');
 const demonImage     = document.querySelector('#enemyImg');
 const turnEvent      = document.querySelector('#turnEvent')
 
+function calcEnemyDamage(monsterName){
+    let damage;
+    switch (monsterName) {
+        case 0:
+            damage = getRandomInt(3, 24);
+            break;
+        case 1:
+            damage = getRandomInt(4, 40);
+            break;
+        case 2:
+            damage = getRandomInt(3, 15);
+            break;
+        case 3:
+            damage = getRandomInt(5, 40);
+            break;
+        case 4:
+            damage = getRandomInt(10, 50);
+            break;
+        case 5:
+            damage = getRandomInt(15, 40);
+            break;
+        case 6: 
+            damage = getRandomInt(0, 70);
+            break;
+        default:
+            damage = 0;
+            break;
+    }
+    return damage;
+}
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
 function StartGame(){
     console.log('The game has started');
@@ -65,7 +106,7 @@ function StartGame(){
 function setAmmo(){
     maxAmmo = 15;
     currentAmmo = maxAmmo;
-    maxShells = 3;
+    maxShells = 2;
     currentShells = maxShells;
     document.querySelector('#maxAmmo').innerHTML = maxAmmo;
     document.querySelector('#currentAmmo').innerHTML = currentAmmo;
@@ -141,12 +182,12 @@ function battle(playerAction){
             console.error('An unknown error has occured!');
             break;
     }
-    if(monsters[index].health <= 0){
+    if(enemyHealth <= 0){
         setNextEnemy();
     }
     else{ 
         /* Enemy Turn */
-        enemyDamage = 25
+        enemyDamage = calcEnemyDamage(index)
         playerHealth -= enemyDamage;
         healthBar.textContent = playerHealth + '%';
         if(playerHealth <= 0){
@@ -156,12 +197,9 @@ function battle(playerAction){
     }
 }
 
-function calcEnemyDamage(){
-    
-}
-
 function setNextEnemy(){
     index += 1;
+    enemyHealth = monsters[index].health;
     demonImage.src = monsters[index].imgSrc;
     demonName.textContent = monsters[index].name;
     demonHealth.textContent = monsters[index].health + '%';
@@ -171,7 +209,37 @@ function setNextEnemy(){
 function GameOver(){
     face.src = './images/GameOver.png';
     playerBar.querySelector('.weaponContainer').style.display = 'none';
+    let restartBtn = document.createElement('button');
+    restartBtn.innerHTML = 'Restart Game';
+    restartBtn.style.width = '50%';
+    restartBtn.style.padding = '1em';
+    restartBtn.style.marginLeft = '2em';
+    restartBtn.addEventListener('click', function(){
+        playerHealth = 100;
+        index = 0;
+        enemyHealth = monsters[index].health;
+        healthBar.textContent = playerHealth + "%";
+        setAmmo()
+        demonImage.src = monsters[index].imgSrc;
+        demonName.textContent = monsters[index].name;
+        demonHealth.textContent = monsters[index].health + '%';
+        console.log(demonHealth)
+        turnEvent.textContent = monsters[index].name + " approaches!";
+        face.src = './images/idle.gif';
+        playerBar.querySelector('.weaponContainer').style.display = 'flex';
+        quadActivated = true;
+        megaActivated = true;
+        damageMultiplier = 1;
+        document.querySelector("#QuadContainer").querySelector('button').disabled = false;
+        document.querySelector("#MegaContainer").querySelector('button').disabled = false;
+        quadCountdown = 10;
+        megaCountdown = 5;
+        document.querySelector('#quadCooldown').innerHTML = '';
+        document.querySelector('#megaCooldown').innerHTML = '';
+
+    });
     healthBar.textContent = 'GAME OVER';
+    healthBar.appendChild(restartBtn);
 }
 
 function Pistol(){
@@ -187,10 +255,10 @@ function Pistol(){
             reloadButton.style.display = 'none';
         });
     }
-    pistolDamage = 10 * damageMultiplier;
+    pistolDamage = 15 * damageMultiplier;
     damageMultiplier = 1;
-    monsters[index].health-= pistolDamage;
-    demonHealth.textContent = monsters[index].health + "%";
+    enemyHealth -= pistolDamage;
+    demonHealth.textContent = enemyHealth + "%";
     turnEvent.innerHTML += `Doom Guy did ${pistolDamage} damage! \n`;
 }
 
@@ -213,10 +281,10 @@ function Shotgun(){
             reloadButton.style.display = 'none';
         });
     }
-    shotGunDamage = 35 * damageMultiplier;
+    shotGunDamage = 45 * damageMultiplier;
     damageMultiplier = 1;
-    monsters[index].health -= shotGunDamage;
-    demonHealth.textContent = monsters[index].health + "%";
+    enemyHealth -= shotGunDamage;
+    demonHealth.textContent = enemyHealth + "%";
     turnEvent.innerHTML += `Doom Guy did ${shotGunDamage} damage! `;
 
 }
