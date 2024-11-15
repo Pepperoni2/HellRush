@@ -16,7 +16,6 @@ let maxAmmo, currentAmmo;
 /* variables for weapon cooldown */
 let quadActivated = true, quadCountdown = 10;
 let megaActivated = true, megaCountdown = 4;
-
 /* Init Objects */
 
 /*
@@ -32,7 +31,6 @@ const monsters = [
     { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png', },
     { name: 'Juggernaut', health: 300, imgSrc: './images/Jugger.png', },
     { name: 'Archvile', health: 120, imgSrc: './images/Archvile.webp', },
-    { name: 'YOU WON!', health: 'You survived against the HELL RUSH', imgSrc: './images/win.gif'} // pls change that 
 ];
 
 /*Initiliasing and declaring Menu references */
@@ -51,6 +49,18 @@ const demonName      = document.querySelector('#enemyName');
 const demonImage     = document.querySelector('#enemyImg');
 const turnEvent      = document.querySelector('#turnEvent')
 
+
+let reloadShotgunBtn = document.createElement('button');
+let reloadPistolBtn  = document.createElement('button');
+let restartBtn       = document.createElement('button');
+
+reloadPistolBtn.addEventListener('click', function(){
+    battle('reload pistol'); 
+});
+
+reloadShotgunBtn.addEventListener('click', function(){
+    battle('reload shotgun')
+});
 
 /*
     function to calculate enemyDamage by ID number that is passed in the battle method
@@ -176,11 +186,14 @@ function battle(playerAction){
             */
             Reloading(currentAmmo, maxAmmo, '#pistolContainer', '#btnPistol', pistolAmmo);
             currentAmmo = maxAmmo;
+            reloadPistolBtn.remove();
             break;
         case 'reload shotgun':
             /* same procedure, see codeLine: 128-130 */
             Reloading(currentShells, maxShells, '#shotGunContainer', '#btnShotgun', shotgunShells);
             currentShells = maxShells;
+            reloadShotgunBtn.remove();    
+
             break;
         default:
             console.error('An unknown error has occured!');
@@ -192,7 +205,10 @@ function battle(playerAction){
     else{ 
         /* Enemy Turn */
         enemyDamage = calcEnemyDamage(index)
+        console.log("Monster index: "+ index + " | EnemyDamage: "+enemyDamage);
         playerHealth -= enemyDamage;
+        console.log("enemy has attacked with "+enemyDamage);
+        console.log(`Player Health: ${playerHealth}`); 
         healthBar.textContent = playerHealth + '%';
         if(playerHealth <= 0){
             GameOver()
@@ -201,48 +217,77 @@ function battle(playerAction){
     }
 }
 
+function PlayerWon(){
+    console.log("You WON!!!!");
+    demonImage.src = './images/win.gif';
+    face.src       = './images/spamClick.gif';
+    demonName.innerHTML = 'CONGRATS!'
+    demonHealth.innerHTML = 'You successfully survived the Hell Rush!';
+    turnEvent.textContent = 'You WON!!!!'
+}
+
 function setNextEnemy(){
     index += 1;
+
+    if(index > monsters.length - 1){
+        PlayerWon();
+    }
+    else{
+        enemyHealth = monsters[index].health;
+        demonImage.src = monsters[index].imgSrc;
+        demonName.textContent = monsters[index].name;
+        demonHealth.textContent = monsters[index].health + '%';
+        turnEvent.textContent = monsters[index].name + " approaches!";
+    }
+    
+}
+
+const restartGame = function(){
+    // Resetting global game variables
+    playerHealth = 100;
+    index = 0;
+    quadActivated = true;
+    megaActivated = true;
+    damageMultiplier = 1;
+    setAmmo()
+    quadCountdown = 10;
+    megaCountdown = 5;
     enemyHealth = monsters[index].health;
+    
+    // Resetting UI 
+    healthBar.textContent = playerHealth + "%";
     demonImage.src = monsters[index].imgSrc;
     demonName.textContent = monsters[index].name;
     demonHealth.textContent = monsters[index].health + '%';
     turnEvent.textContent = monsters[index].name + " approaches!";
+    face.src = './images/idle.gif';
+
+    // reset styling, button states and remove reload Button
+    playerBar.querySelector('.weaponContainer').style.display = 'flex';
+    document.querySelector('#pistolContainer').querySelector('#btnPistol').style.display = 'block';
+    document.querySelector('#shotGunContainer').querySelector('#btnShotgun').style.display = 'block';
+    document.querySelector("#QuadContainer").querySelector('button').disabled = false;
+    document.querySelector("#MegaContainer").querySelector('button').disabled = false;
+    document.querySelector('#quadCooldown').innerHTML = '';
+    document.querySelector('#megaCooldown').innerHTML = '';
+
+    reloadPistolBtn.remove();
+    reloadShotgunBtn.remove();
+
 }
 
 function GameOver(){
+
     face.src = './images/GameOver.png';
     playerBar.querySelector('.weaponContainer').style.display = 'none';
-    let restartBtn = document.createElement('button');
+    healthBar.textContent = 'GAME OVER';
+
     restartBtn.innerHTML = 'Restart Game';
     restartBtn.style.width = '50%';
     restartBtn.style.padding = '1em';
     restartBtn.style.marginLeft = '2em';
-    restartBtn.addEventListener('click', function(){
-        playerHealth = 100;
-        index = 0;
-        enemyHealth = monsters[index].health;
-        healthBar.textContent = playerHealth + "%";
-        setAmmo()
-        demonImage.src = monsters[index].imgSrc;
-        demonName.textContent = monsters[index].name;
-        demonHealth.textContent = monsters[index].health + '%';
-        console.log(demonHealth)
-        turnEvent.textContent = monsters[index].name + " approaches!";
-        face.src = './images/idle.gif';
-        playerBar.querySelector('.weaponContainer').style.display = 'flex';
-        quadActivated = true;
-        megaActivated = true;
-        damageMultiplier = 1;
-        document.querySelector("#QuadContainer").querySelector('button').disabled = false;
-        document.querySelector("#MegaContainer").querySelector('button').disabled = false;
-        quadCountdown = 10;
-        megaCountdown = 5;
-        document.querySelector('#quadCooldown').innerHTML = '';
-        document.querySelector('#megaCooldown').innerHTML = '';
-
-    });
-    healthBar.textContent = 'GAME OVER';
+    
+    restartBtn.addEventListener('click', restartGame);
     healthBar.appendChild(restartBtn);
 }
 
@@ -251,13 +296,9 @@ function Pistol(){
     updateAmmo(pistolAmmo, currentAmmo);
     if(currentAmmo <= 0){
         document.querySelector('#pistolContainer').querySelector('#btnPistol').style.display = 'none';
-        let reloadButton = document.createElement('button');
-        reloadButton.innerHTML = 'Reload Pistol'
-        document.querySelector('#pistolContainer').appendChild(reloadButton);
-        reloadButton.addEventListener('click', function(){
-            battle('reload pistol');
-            reloadButton.style.display = 'none';
-        });
+        reloadPistolBtn.innerHTML = 'Reload Pistol'
+        document.querySelector('#pistolContainer').appendChild(reloadPistolBtn);
+
     }
     pistolDamage = 15 * damageMultiplier;
     damageMultiplier = 1;
@@ -277,13 +318,10 @@ function Shotgun(){
     */
     if(currentShells <= 0){
         document.querySelector('#shotGunContainer').querySelector('#btnShotgun').style.display = 'none';
-        let reloadButton = document.createElement('button');
-        reloadButton.innerHTML = 'Reload Shotgun'
-        document.querySelector('#shotGunContainer').appendChild(reloadButton);
-        reloadButton.addEventListener('click', function(){
-            battle('reload shotgun')
-            reloadButton.style.display = 'none';
-        });
+        
+        reloadShotgunBtn.innerHTML = 'Reload Shotgun'
+        document.querySelector('#shotGunContainer').appendChild(reloadShotgunBtn);
+
     }
     shotGunDamage = 45 * damageMultiplier;
     damageMultiplier = 1;
