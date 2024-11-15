@@ -3,55 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELL RUSH - AI Retribution</title>
+    <title>HELL RUSH</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./images/TabLogo.png">
 </head>
 <body>
     <img class="bg" src="./images/Cover.png">
 
-    <div class="startMenu">
-        <h1>HELL RUSH</h1>
-        <button onclick="StartGame()" id="startBtn">Start Game</button>
+    <div class="container">
+        <div class="startMenu">
+            <h1>HELL RUSH</h1>
+            <button onclick="StartGame()" id="startBtn">Start Game</button>
+        </div>
+    
+        <div class="terminal">
+            <h1>Fight Terminal</h1>
+            <p id="turnEvent"></p>
+        </div>
+    
+        <div class="enemyContainer">
+            <p id="enemyName">Demon</p>
+            <img id="enemyImg" src="./images/ImpWalking.webp" height="300em" alt="">
+            <p id="enemyHealth">Enemy Health</p>
+        </div>
+        
+        <div class="playerBar">
+            <div class="healthContainer">
+                Health
+            </div>
+            <div class="faceContainer">
+                <img id="face" src="./images/idle.gif" height="80em">
+            </div>
+            <div class="weaponContainer">
+                <div id="pistolContainer">
+                    <button id="btnPistol" onclick="battle('pistol')"><div id="progressPistol">Pistol (<span id="currentAmmo"></span>/<span id="maxAmmo"></span>)</div></button>
+                </div>
+                <div id="shotGunContainer">
+                    <button id="btnShotgun" onclick="battle('shotgun')"><div id="progressShotgun">Shotgun (<span id="currentShells"></span>/<span id="maxShells"></span>)</div></button>
+                </div>
+                <div id="QuadContainer">
+                    <button id="quad" onclick="battle('quad')">
+                        Quad Damage <span id="quadCooldown"></span>
+                    </button>
+                </div>
+                <div id="MegaContainer">
+                    <button id="mega" onclick="battle('mega')">
+                        Mega Health <span id="megaCooldown"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="terminal">
-        <h1>Fight Terminal</h1>
-        <p id="turnEvent"></p>
-    </div>
-
-    <div class="enemyContainer">
-        <p id="enemyName">Demon</p>
-        <img id="enemyImg" src="./images/ImpWalking.webp" height="300em" alt="">
-        <p id="enemyHealth">Enemy Health</p>
-    </div>
-
-    <footer class="playerBar">
-        <div class="healthContainer">
-            Health
-        </div>
-        <div class="faceContainer">
-            <img id="face" src="./images/idle.gif" height="80em">
-        </div>
-        <div class="weaponContainer">
-            <div id="pistolContainer">
-                <button id="btnPistol" onclick="battle('pistol')">Pistol (<span id="currentAmmo"></span>/<span id="maxAmmo"></span>)</button>
-            </div>
-            <div id="shotGunContainer">
-                <button id="btnShotgun" onclick="battle('shotgun')">Shotgun (<span id="currentShells"></span>/<span id="maxShells"></span>)</button>
-            </div>
-            <div id="QuadContainer">
-                <button id="quad" onclick="battle('quad')">
-                    Quad Damage <span id="quadCooldown"></span>
-                </button>
-            </div>
-            <div id="MegaContainer">
-                <button id="mega" onclick="battle('mega')">
-                    Mega Health <span id="megaCooldown"></span>
-                </button>
-            </div>
-        </div>
-    </footer>
 
     <script src="./script.js"></script>
 </body>

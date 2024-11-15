@@ -72,16 +72,16 @@ function calcEnemyDamage(monsterIndex){
             damage = getRandomInt(3, 24);
             break;
         case 1:
-            damage = getRandomInt(4, 40);
+            damage = getRandomInt(4, 30);
             break;
         case 2:
             damage = getRandomInt(3, 15);
             break;
         case 3:
-            damage = getRandomInt(5, 40);
+            damage = getRandomInt(5, 30);
             break;
         case 4:
-            damage = getRandomInt(10, 50);
+            damage = getRandomInt(10, 30);
             break;
         case 5:
             damage = getRandomInt(15, 40);

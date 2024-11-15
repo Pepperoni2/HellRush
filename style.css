@@ -24,9 +24,16 @@ body{
     position: relative;
     margin: 0;
     overflow: hidden;
+
+}
+
+.container{
+    /* margin: .5em; */
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
 }
 /* styling background */
 .bg{
@@ -41,9 +48,23 @@ body{
     opacity: .1;
 }
 
+/* progress styling */
+
+#progressPistol{
+    width: 100%;
+    background-color: rgba(49, 42, 42, 0.192);
+}
+#progressShotgun{
+    width: 100%;
+    background-color: #f1993452;
+}
+
 /* styling startMenu */
 
 .startMenu{
+
+    border: 10px solid transparent; /* transparent border */
+    border-image: linear-gradient(to right, #ff0000, #ff8800, #f19934) 1;
     font-size: 30px;
     /* Center Menu Div in body */
     position: absolute;
@@ -160,6 +181,8 @@ body{
     right: 0;
     margin: auto; */
     /* margin-top: 10em; */
+    margin-bottom: 20px;
+    width: 60%;
     background-color: brown;
     display: none;
     align-items: center;
@@ -184,14 +207,20 @@ body{
 
 /* turnContainer styling */
 .terminal{
+    h1{
+        border-bottom: 1px greenyellow solid;
+    }
+    border: 10px rgba(245, 245, 245, 0.601) solid;
     visibility: hidden;
     font-family: "terminalUI";
     background-color: black;
     color: greenyellow;
-    width: 25em;
-    height: 10em;
-    position: absolute;
+    width: 30%;
+    height: 15em;
+    align-self: flex-start;
+    padding: 5px;
+    /* position: absolute;
     left: 0;
-    bottom: 0;
-    margin-bottom: 5em; 
+    bottom: 0; */
+    /* margin-bottom: 5em;  */
 }
