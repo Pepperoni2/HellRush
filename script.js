@@ -3,11 +3,11 @@
 /*
     variables that are important for game calculation
 */
-let playerHealth = 100;
-let enemyHealth = 25;
+let playerHealth = 100;     // global variable for the playerHealth
+let enemyHealth = 25;       // global variable for the enemyHealth
 let enemyDamage;
 let pistolDamage, shotGunDamage;
-let damageMultiplier = 1;
+let damageMultiplier = 1;   // damage multiplier is either 1 or 4
 
 // set ammo variables
 let maxShells, currentShells;
@@ -32,10 +32,10 @@ const monsters = [
     { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png', },
     { name: 'Juggernaut', health: 300, imgSrc: './images/Jugger.png', },
     { name: 'Archvile', health: 120, imgSrc: './images/Archvile.webp', },
-    { name: 'YOU WON!', health: 'You survived against the HELL RUSH', imgSrc: './images/win.gif'}
+    { name: 'YOU WON!', health: 'You survived against the HELL RUSH', imgSrc: './images/win.gif'} // pls change that 
 ];
 
-/*Initiliasing  Menu references */
+/*Initiliasing and declaring Menu references */
 const startMenu      = document.querySelector('.startMenu');
 const playerBar      = document.querySelector('.playerBar');
 const face           = document.querySelector('#face');
@@ -51,9 +51,13 @@ const demonName      = document.querySelector('#enemyName');
 const demonImage     = document.querySelector('#enemyImg');
 const turnEvent      = document.querySelector('#turnEvent')
 
-function calcEnemyDamage(monsterName){
+
+/*
+    function to calculate enemyDamage by ID number that is passed in the battle method
+*/
+function calcEnemyDamage(monsterIndex){
     let damage;
-    switch (monsterName) {
+    switch (monsterIndex) {
         case 0:
             damage = getRandomInt(3, 24);
             break;
@@ -84,7 +88,7 @@ function calcEnemyDamage(monsterName){
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+}
 
 function StartGame(){
     console.log('The game has started');
@@ -108,9 +112,9 @@ function setAmmo(){
     currentAmmo = maxAmmo;
     maxShells = 2;
     currentShells = maxShells;
-    document.querySelector('#maxAmmo').innerHTML = maxAmmo;
-    document.querySelector('#currentAmmo').innerHTML = currentAmmo;
-    document.querySelector('#maxShells').innerHTML = maxShells;
+    document.querySelector('#maxAmmo').innerHTML       = maxAmmo;
+    document.querySelector('#currentAmmo').innerHTML   = currentAmmo;
+    document.querySelector('#maxShells').innerHTML     = maxShells;
     document.querySelector('#currentShells').innerHTML = currentShells;
 }
 // Updating ammo Count on the User Interface ("Player Bar")
