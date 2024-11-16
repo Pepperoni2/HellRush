@@ -24,13 +24,13 @@ let megaActivated = true, megaCountdown = 4;
 */
 let index = 0;
 const monsters = [
-    { name: 'Imp', health: 25, imgSrc: './images/ImpWalking.webp'},
-    { name: 'Pinky', health: 75, imgSrc: './images/PinkyIdle.webp', },
-    { name: 'Zombieman', health: 15, imgSrc: './images/Formerhuman_sprite.webp', },
-    { name: 'Cacodemon', health: 150, imgSrc: './images/cacodemon.png', },
-    { name: 'Demonwarrior', health: 200, imgSrc: './images/EXdemon.png', },
-    { name: 'Juggernaut', health: 300, imgSrc: './images/Jugger.png', },
-    { name: 'Archvile', health: 120, imgSrc: './images/Archvile.webp', },
+    { name: 'Imp', health: 25, imgSrc: './images/ImpWalking.webp'}, // 0
+    { name: 'Pinky', health: 75, imgSrc: './images/PinkyIdle.webp', }, // 1
+    { name: 'Zombieman', health: 15, imgSrc: './images/Formerhuman_sprite.webp', }, // 2
+    { name: 'Cacodemon', health: 150, imgSrc: './images/cacodemon.png', }, // 3 
+    { name: 'Archvile', health: 120, imgSrc: './images/Archvile.webp', }, // 4
+    { name: 'Baron of Hell', health: 200, imgSrc: './images/Baronofhell_sprite.webp', }, // 5
+    { name: 'Spidermaster Mind', health: 300, imgSrc: './images/Spidermastermind_sprite.webp', }, // 6
 ];
 
 /*Initiliasing and declaring Menu references */
@@ -51,8 +51,17 @@ const turnEvent      = document.querySelector('#turnEvent')
 
 
 let reloadShotgunBtn = document.createElement('button');
+reloadShotgunBtn.classList.add('button-78');
 let reloadPistolBtn  = document.createElement('button');
+reloadPistolBtn.classList.add('button-78');
+
+
 let restartBtn       = document.createElement('button');
+restartBtn.classList.add('button-78');
+restartBtn.innerHTML = 'Restart Game';
+restartBtn.style.width = '50%';
+restartBtn.style.padding = '1em';
+restartBtn.style.marginLeft = '2em';   
 
 reloadPistolBtn.addEventListener('click', function(){
     battle('reload pistol'); 
@@ -61,6 +70,10 @@ reloadPistolBtn.addEventListener('click', function(){
 reloadShotgunBtn.addEventListener('click', function(){
     battle('reload shotgun')
 });
+restartBtn.addEventListener('click', function(){
+    restartGame();
+});
+
 
 /*
     function to calculate enemyDamage by ID number that is passed in the battle method
@@ -81,13 +94,13 @@ function calcEnemyDamage(monsterIndex){
             damage = getRandomInt(5, 30);
             break;
         case 4:
-            damage = getRandomInt(10, 30);
+            damage = getRandomInt(0, 70);
             break;
         case 5:
-            damage = getRandomInt(15, 40);
+            damage = getRandomInt(10, 40);
             break;
         case 6: 
-            damage = getRandomInt(0, 70);
+        damage = getRandomInt(15, 40);
             break;
         default:
             damage = 0;
@@ -101,7 +114,6 @@ function getRandomInt(min, max) {
 }
 
 function StartGame(){
-    console.log('The game has started');
     startMenu.style.display = 'none';
     playerBar.style.visibility = 'visible';
     terminal.style.visibility = 'visible';
@@ -140,14 +152,13 @@ function Reloading(ammotype, ammoLimit, containerRef = '', btnRef = '', spanRef)
 }
 
 function battle(playerAction){
-
     /* Cooldown Check for Mega Health and Quad Damage */    
     if(!quadActivated){
         quadCountdown -= 1;  
         document.querySelector('#quadCooldown').innerHTML = quadCountdown + ' Turns remaining';
 
         if(quadCountdown == 0){
-            quadCountdown = 5;
+            quadCountdown = 10;
             quadActivated = true;
             document.querySelector("#QuadContainer").querySelector('button').disabled = false;
             document.querySelector('#quadCooldown').innerHTML = '';
@@ -199,16 +210,19 @@ function battle(playerAction){
             console.error('An unknown error has occured!');
             break;
     }
+    // enemyContainer.style.animation = "skew-x-shakeng 0.15s";
+    // enemyContainer.style.animationPlayState = "running";
+
     if(enemyHealth <= 0){
         setNextEnemy();
     }
     else{ 
         /* Enemy Turn */
         enemyDamage = calcEnemyDamage(index)
-        console.log("Monster index: "+ index + " | EnemyDamage: "+enemyDamage);
+        // console.log("Monster index: "+ index + " | EnemyDamage: "+enemyDamage);
         playerHealth -= enemyDamage;
-        console.log("enemy has attacked with "+enemyDamage);
-        console.log(`Player Health: ${playerHealth}`); 
+        // console.log("enemy has attacked with "+enemyDamage);
+        // console.log(`Player Health: ${playerHealth}`); 
         healthBar.textContent = playerHealth + '%';
         if(playerHealth <= 0){
             GameOver()
@@ -218,12 +232,14 @@ function battle(playerAction){
 }
 
 function PlayerWon(){
-    console.log("You WON!!!!");
-    demonImage.src = './images/win.gif';
+    demonImage.src = './images/doomguy-dance.gif';
     face.src       = './images/spamClick.gif';
     demonName.innerHTML = 'CONGRATS!'
     demonHealth.innerHTML = 'You successfully survived the Hell Rush!';
-    turnEvent.textContent = 'You WON!!!!'
+    turnEvent.textContent = 'You WON!!!! (~‾⌣‾)~';
+    playerBar.querySelector('.weaponContainer').style.display = 'none';
+    healthBar.appendChild(restartBtn);
+
 }
 
 function setNextEnemy(){
@@ -242,7 +258,7 @@ function setNextEnemy(){
     
 }
 
-const restartGame = function(){
+function restartGame(){
     // Resetting global game variables
     playerHealth = 100;
     index = 0;
@@ -280,14 +296,7 @@ function GameOver(){
 
     face.src = './images/GameOver.png';
     playerBar.querySelector('.weaponContainer').style.display = 'none';
-    healthBar.textContent = 'GAME OVER';
-
-    restartBtn.innerHTML = 'Restart Game';
-    restartBtn.style.width = '50%';
-    restartBtn.style.padding = '1em';
-    restartBtn.style.marginLeft = '2em';
-    
-    restartBtn.addEventListener('click', restartGame);
+    healthBar.textContent = 'GAME OVER'; 
     healthBar.appendChild(restartBtn);
 }
 

@@ -16,15 +16,17 @@
             <button onclick="StartGame()" id="startBtn">Start Game</button>
         </div>
     
-        <div class="terminal">
-            <h1>Fight Terminal</h1>
-            <p id="turnEvent"></p>
-        </div>
+
     
         <div class="enemyContainer">
             <p id="enemyName">Demon</p>
             <img id="enemyImg" src="./images/ImpWalking.webp" height="300em" alt="">
             <p id="enemyHealth">Enemy Health</p>
+        </div>
+
+        <div class="terminal">
+            <h1>Fight Terminal</h1>
+            <p id="turnEvent"></p>
         </div>
         
         <div class="playerBar">
@@ -36,19 +38,19 @@
             </div>
             <div class="weaponContainer">
                 <div id="pistolContainer">
-                    <button id="btnPistol" onclick="battle('pistol')"><div id="progressPistol">Pistol (<span id="currentAmmo"></span>/<span id="maxAmmo"></span>)</div></button>
+                    <button id="btnPistol" class="button-78" onclick="battle('pistol')"><div id="progressPistol">Pistol (<span id="currentAmmo"></span>/<span id="maxAmmo"></span>)</div></button>
                 </div>
                 <div id="shotGunContainer">
-                    <button id="btnShotgun" onclick="battle('shotgun')"><div id="progressShotgun">Shotgun (<span id="currentShells"></span>/<span id="maxShells"></span>)</div></button>
+                    <button id="btnShotgun" class="button-78" onclick="battle('shotgun')"><div id="progressShotgun">Shotgun (<span id="currentShells"></span>/<span id="maxShells"></span>)</div></button>
                 </div>
                 <div id="QuadContainer">
-                    <button id="quad" onclick="battle('quad')">
+                    <button id="quad" class="button-78" onclick="battle('quad')">
                         Quad Damage <span id="quadCooldown"></span>
                     </button>
                 </div>
                 <div id="MegaContainer">
-                    <button id="mega" onclick="battle('mega')">
-                        Mega Health <span id="megaCooldown"></span>
+                    <button id="mega" class="button-78" onclick="battle('mega')">
+                        Mega Health <span style="color:rgb(99, 99, 194);">(100+ HP)</span> <span id="megaCooldown"></span>
                     </button>
                 </div>
             </div>

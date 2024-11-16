@@ -32,7 +32,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column-reverse;
+    flex-direction: column;
     flex-wrap: wrap;
 }
 /* styling background */
@@ -40,8 +40,6 @@ body{
     position: fixed; 
     top: 0; 
     left: 0; 
-    
-      
     /* Preserve aspet ratio */
     min-width: 100%;
     min-height: 100%;
@@ -62,7 +60,6 @@ body{
 /* styling startMenu */
 
 .startMenu{
-
     border: 10px solid transparent; /* transparent border */
     border-image: linear-gradient(to right, #ff0000, #ff8800, #f19934) 1;
     font-size: 30px;
@@ -111,16 +108,19 @@ body{
 
 .playerBar{
     position: absolute;
-    bottom:0;
+    bottom: 0;
+    display: flex;
+    align-self: flex-end;
+    visibility: hidden;
+    bottom: 0;
     width: 100%;
-    height: 5em;
+    height: 6em;
     margin: 0;
     background-color: rgb(174, 173, 173);
 
     font-family: "UI_Font";
 
-    display: flex;
-    visibility: hidden;
+ 
 }
 
 .playerBar button{
@@ -128,7 +128,7 @@ body{
 }
 
 .healthContainer{
-    border: 1px solid red;
+    border: 2px solid rgb(66, 66, 67);
     flex-grow: 3;
     color: rgb(139, 25, 25);
     font-size: 32px;
@@ -143,8 +143,8 @@ body{
 }
 .weaponContainer{
     display: flex;
-    border: 1px dashed green;
-    flex-shrink: 3;
+    border: 2px solid rgb(66, 66, 67);
+    flex-grow: 4;
     align-items: center;
     justify-content: center;
     -webkit-flex-wrap: wrap;
@@ -153,7 +153,7 @@ body{
 }
 
 #pistolContainer, #shotGunContainer, #QuadContainer, #MegaContainer{
-    width: 400px; 
+    width: 300px; 
     button{
         padding: 10px;
         &:hover{
@@ -169,7 +169,7 @@ body{
     list-style: none;
 }
 .faceContainer{
-    border: 1px dotted blue;
+    border: 2px solid rgb(66, 66, 67);
     flex-grow: 1;
 }
 
@@ -181,8 +181,8 @@ body{
     right: 0;
     margin: auto; */
     /* margin-top: 10em; */
-    margin-bottom: 20px;
-    width: 60%;
+    margin-bottom: 10px;
+    width: 50%;
     background-color: brown;
     display: none;
     align-items: center;
@@ -207,20 +207,143 @@ body{
 
 /* turnContainer styling */
 .terminal{
-    h1{
+    /* h1{
         border-bottom: 1px greenyellow solid;
-    }
+    } */
     border: 10px rgba(245, 245, 245, 0.601) solid;
     visibility: hidden;
     font-family: "terminalUI";
     background-color: black;
     color: greenyellow;
     width: 30%;
-    height: 15em;
+    height: 10em;
     align-self: flex-start;
     padding: 5px;
-    /* position: absolute;
+    /* position: absolute; */
     left: 0;
-    bottom: 0; */
-    /* margin-bottom: 5em;  */
+    top: 0;
+}
+
+/* shaking animation */
+@keyframes skew-x-shakeng{
+    0% { transform: skewX(-15deg); }
+    5% { transform: skewX(15deg); }
+    10% { transform: skewX(-15deg); }
+    15% { transform: skewX(15deg); }
+    20% { transform: skewX(0deg); }
+    100% { transform: skewX(0deg); }
+}
+
+
+/* Button styling */
+
+/* CSS */
+.button-78 {
+  align-items: center;
+  appearance: none;
+  background-clip: padding-box;
+  background-color: initial;
+  background-image: none;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  flex-direction: row;
+  flex-shrink: 0;
+  font-family: "UI_Font";
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 0px;
+  margin: 0;
+  min-height: 40px;
+  outline: none;
+  overflow: visible;
+  padding: 0px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  /* vertical-align: middle; */
+  width: auto;
+  word-break: keep-all;
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .button-78 {
+    padding: 0px;
+  }
+}
+
+.button-78:before,
+.button-78:after {
+  border-radius: 80px;
+}
+
+.button-78:before {
+  background-image: linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -2;
+}
+
+.button-78:after {
+  background-color: initial;
+  background-image: linear-gradient(#541a0f 0, #0c0d0d 100%);
+  bottom: 4px;
+  content: "";
+  display: block;
+  left: 4px;
+  overflow: hidden;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  transition: all 100ms ease-out;
+  z-index: -1;
+}
+
+.button-78:hover:not(:disabled):before {
+  background: linear-gradient(92.83deg, rgb(255, 116, 38) 0%, rgb(249, 58, 19) 100%);
+}
+
+.button-78:hover:not(:disabled):after {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition-timing-function: ease-in;
+  opacity: 0;
+}
+
+.button-78:active:not(:disabled) {
+  color: #ccc;
+}
+
+.button-78:active:not(:disabled):before {
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
+}
+
+.button-78:active:not(:disabled):after {
+  background-image: linear-gradient(#541a0f 0, #0c0d0d 100%);
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+}
+
+.button-78:disabled {
+  cursor: default;
+  opacity: .24;
 }
