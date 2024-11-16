@@ -26,7 +26,7 @@ let currentAmmo, currentShells; // current ammo variables
     Quad Damage - 10 Turn remaining
 */
 let quadAvailable = true, quadCountdown = 10;
-let megaAvailable = true, megaCountdown = 4;
+let megaAvailable = true, megaCountdown = 5;
 
 /* Init Objects */
 /*
@@ -311,7 +311,7 @@ function battle(playerAction){
         if(playerHealth <= 0){
             GameOver()
         }
-        turnEvent.innerHTML += "<br>"+`Doom Guy received ${enemyDamage}`;
+        turnEvent.innerHTML += "<br>"+`Doom Guy received ${enemyDamage} Damage`;
     }
 }
 
