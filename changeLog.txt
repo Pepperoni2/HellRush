@@ -1,22 +1,14 @@
 TODO:
 Important:
  - fix reload button bug ✔
- - removeCild() diese eine reloadbtn Z.250 ✔
 
  - tweak eventlistener of the restartBtn
-    - add extra const function
-
- const parent = document.getElementById('container');
- const child = document.getElementById('childElement');
- parent.removeChild(child);  
+    - add extra const function ✔
+ 
 
 Styling:
- - make Buttons more appealing
- - myb add bootstrap
+ - make Buttons more appealing ✔
 
-optional:
-
-- background with levels
 
 
 ==================== LOG ======================

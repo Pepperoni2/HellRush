@@ -1,0 +1,33 @@
+HELL RUSH is DOOM inspired game with turn-based combat
+Disclaimer: All the assets are from the original DOOM game by id Software, pls no sue
+
+You mission is to survive against a wave of Enemies.
+Use your Weapons and Abilities effectivly to survive!
+
+==========================
+Your Weapons and Abilities
+--------------------------
+
+-) Pistol: Has 15 has Bullets and does 15 Damage
+
+-) Shotgun: Has 2 Max Shells and does 45 Damage
+
+-) Quad Damage: When used adds a multiplier(x4) to your next attack
+
+-) Mega Health: When used adds +100 Health Points to your existing Health (Max Health: 250)
+
+==============
+Tips & Tricks
+--------------
+Enemies like the "Archvile" have a higher damagerange and could potentially do more damage to the player
+
+Don't be afraid to use Mega Health ability to heal
+
+Get familiar with cooldowns
+
+Save your Quad Damage for stronger enemies
+
+============================
+GOOD LUCK and HAVE FUN!!!
+
+
